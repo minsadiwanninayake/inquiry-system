@@ -56,30 +56,47 @@ export default function InquiryForm({ onCreated }: Props) {
       value: form[name],
       onChange: (ev: React.ChangeEvent<HTMLInputElement & HTMLTextAreaElement>) =>
         setForm({ ...form, [name]: ev.target.value }),
-      className: `w-full border rounded px-3 py-2 ${errors[name] ? 'border-red-500' : ''}`,
+      className: `w-full rounded-lg border bg-white px-3.5 py-2.5 text-sm outline-none transition focus:ring-4 ${
+        errors[name]
+          ? 'border-red-400 focus:border-red-500 focus:ring-red-100'
+          : 'border-slate-300 focus:border-indigo-500 focus:ring-indigo-100'
+      }`,
     };
     return (
       <div>
-        <label htmlFor={name} className="block text-sm mb-1">{label}</label>
-        {multiline ? <textarea rows={4} {...common} /> : <input {...common} />}
-        {errors[name] && <p className="text-sm text-red-600 mt-1">{errors[name]}</p>}
+        <label htmlFor={name} className="mb-1.5 block text-sm font-medium text-slate-700">{label}</label>
+        {multiline ? <textarea rows={5} {...common} /> : <input {...common} />}
+        {errors[name] && <p className="mt-1.5 text-sm text-red-600">{errors[name]}</p>}
       </div>
     );
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-4 bg-white p-6 rounded-lg shadow max-w-xl" noValidate>
+    <form
+      onSubmit={onSubmit}
+      noValidate
+      className="max-w-2xl space-y-5 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
+    >
       {formError && (
-        <p role="alert" className="text-sm text-red-600 bg-red-50 p-2 rounded">{formError}</p>
+        <p role="alert" className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+          {formError}
+        </p>
       )}
-      {field('customer_name', 'Customer name')}
-      {field('contact', 'Contact (phone or email)')}
+      <div className="grid gap-5 sm:grid-cols-2">
+        {field('customer_name', 'Customer name')}
+        {field('contact', 'Contact (phone or email)')}
+      </div>
       {field('subject', 'Subject')}
       {field('description', 'Description', true)}
-      <button type="submit" disabled={saving}
-        className="bg-blue-600 text-white rounded px-4 py-2 disabled:opacity-50">
-        {saving ? 'Saving...' : 'Save inquiry'}
-      </button>
+      <div className="flex justify-end">
+        <button
+          type="submit"
+          disabled={saving}
+          className="rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          {saving ? 'Saving...' : 'Save inquiry'}
+        </button>
+      </div>
     </form>
   );
 }
